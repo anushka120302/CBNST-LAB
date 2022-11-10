@@ -1,42 +1,56 @@
-#include<stdio.h>
-#include<math.h>
+#include <stdio.h> 
+#include <math.h>  
+void bisect (float *mid_pt, float int_st, float int_end, int *iter_cnt);  
+double get_fun (double res);  
+  
+  
+int main ()  
+{   
+    int iter_cnt, mx_iter_cnt;  
+    float mid_pt, int_st, int_end, err_all, root;  
+      
+    printf (" \n Enter the first starting point: ");  
+    scanf (" %f", &int_st);  
+    printf (" \n Enter the second ending point: ");  
+    scanf (" %f", &int_end);  
+    printf (" \n Enter the maximum iteration to be allowed: ");  
+    scanf (" %d", &mx_iter_cnt);  
 
-float f(float x)
-{
-    return x*x*x-x*x+2;
-}
-
-int main()
-{
-    float x0,x1,x2,e;
-    float y0,y1,y2;
-    int steps=0;
-    printf("Enter Initial Intervals: \n");
-    scanf("%f %f",&x0,&x1);
-    printf("Enter tolerable error: \n");
-    scanf("%f",&e);
-    y0=f(x0);
-    y1=f(x1);
-    if(y0*y1>=0)
-        printf("Incorrect Guess\n");
-    else
-    {
-        printf("Steps x0 x1 x2\n");
-        do
-        {
-            x2=(x0+x1)/2.0;
-            y2=f(x2);
-            printf("%d %f %f %f\n",steps,x0,x1,x2);
-            if(y2>0)
-            {
-                x1=x2;
-            }
-            else
-            {
-                x0=x2;
-            }
-            steps++;
-        }while(x1-x0>=e);
-        printf("\nRoot is: %f\n",x2);
-    }
-}
+    printf (" Input the no. of allowed error point: ");  
+    scanf (" %f", &err_all);    
+    bisect (&mid_pt, int_st, int_end, &iter_cnt);  
+       
+    for (iter_cnt = 0; iter_cnt < mx_iter_cnt; mid_pt = root)  
+    {   
+        if ( get_fun (int_st) * get_fun (mid_pt) < 0)  
+        {  
+            int_end = mid_pt; 
+        }  
+        else  
+        {  
+            int_st = mid_pt; 
+        }  
+          
+        bisect ( &root, int_st, int_end, &iter_cnt); 
+        if ( fabs (root - mid_pt) < err_all)  
+        {  
+            printf (" \n The approximation root is: %f \n", root);  
+            return 0;  
+        }  
+    }  
+    printf (" The iterations are insufficient: ");  
+    return 0;  
+}  
+  
+ 
+void bisect (float *mid_pt, float int_st, float int_end, int *iter_cnt)  
+{  
+    *mid_pt = (int_st + int_end) / 2; // get the middle value  
+    ++(*iter_cnt); // increment the iteration value  
+    printf ( " Iteration \t %d: \t %f \n", *iter_cnt, *mid_pt);  
+}  
+  
+double get_fun (double res)  
+{  
+    return (res * res * res - 4 * res - 9);  
+}  
